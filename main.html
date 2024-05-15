@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grocery Website</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .box {
+            cursor: pointer; 
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -12,9 +17,35 @@
     </header>
     <div class="container">
         <div class="main-content">
-            <h2>A way to see what you need for grocery</h2>
-            <p>Friends and family will be able to check the app or website for groceries</p>
+            <h2>Create a grocery list</h2>
+            <p>Able to create group with friends and family for a specific grocery list</p>
         </div>
     </div>
+    <div class="box" id="familyBox">
+        <h2>Family</h2>
+    </div>
+    <div class="box" id="friendsBox">
+        <h2>Friends</h2>
+    </div>
+    <div class="box" id="collegeDormBox">
+        <h2>College Dorm</h2>
+    </div>
+    <div class="box" id="apartmentBox">
+        <h2>Apartment</h2>
+    </div>
+
+    <script>
+        const boxes = document.querySelectorAll('.box');
+
+        boxes.forEach(box => {
+            box.addEventListener('click', function() {
+                handleBoxClick(this.id); 
+            });
+        });
+
+        function handleBoxClick(boxId) {
+            alert("You clicked the box for " + document.getElementById(boxId).textContent);
+        }
+    </script>
 </body>
 </html>

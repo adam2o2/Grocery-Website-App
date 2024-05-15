@@ -22,3 +22,49 @@ header {
     padding: 20px;
     background-color: #fff;
 }
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.main-content {
+    padding: 20px;
+    background-color: #fff;
+    text-align: center; /* Center-align text */
+}
+.main-content p {
+    padding: 20px;
+    background-color: #fff;
+    text-align: center; /* Center-align text */
+}
+
+.box {
+    color: black;
+    padding: 30px;
+    background-color: #e0e0e0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 20px;
+    margin-right: 20px;
+    flex: 0 0 30%;
+}
