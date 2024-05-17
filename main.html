@@ -31,33 +31,10 @@
         </div>
     </div>
     <div class="container" id="groupContainer">
-        <div class="box" id="familyBox">
-            <h2>Family</h2>
-        </div>
-        <div class="box" id="friendsBox">
-            <h2>Friends</h2>
-        </div>
-        <div class="box" id="collegeDormBox">
-            <h2>College Dorm</h2>
-        </div>
-        <div class="box" id="apartmentBox">
-            <h2>Apartment</h2>
-        </div>
+        <!-- New groups will be added here -->
     </div>
 
     <script>
-        const boxes = document.querySelectorAll('.box');
-
-        boxes.forEach(box => {
-            box.addEventListener('click', function() {
-                handleBoxClick(this.id); 
-            });
-        });
-
-        function handleBoxClick(boxId) {
-            alert("You clicked the box for " + document.getElementById(boxId).textContent);
-        }
-
         document.getElementById('createGroupButton').addEventListener('click', function() {
             const groupName = document.getElementById('groupName').value.trim();
             if (groupName) {
