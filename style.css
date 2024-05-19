@@ -24,12 +24,11 @@ header {
     padding: 20px;
     background-color: #fff;
     text-align: center;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    transform: translateY(-20px); /* Move the box up */
+    transform: translateY(-20px);
 }
 
-/* Center-align text inside main-content */
 .main-content h2, .main-content p {
     margin: 0;
 }
@@ -76,4 +75,42 @@ header {
     flex-wrap: wrap;
     width: 80%;
     margin: 20px auto;
+}
+
+.content {
+    padding: 20px;
+    background-color: #fff;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    transform: translateY(-20px);
+    width: 100%;
+}
+
+.content h2 {
+    margin: 0 0 20px;
+}
+
+.details {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.list-box, .picture-box {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #fff;
+    width: 45%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.list-box ul {
+    list-style: none;
+    padding: 0;
+}
+
+.list-box li, .picture-box img {
+    margin: 10px 0;
 }
