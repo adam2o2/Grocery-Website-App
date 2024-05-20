@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Group Details</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .list-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -14,6 +24,10 @@
         <div class="content">
             <h2 id="groupName"></h2>
             <div class="details">
+                <div class="input-group">
+                    <input type="text" id="newFriend" placeholder="Add to the list">
+                    <button id="addFriendButton">Add</button>
+                </div>
                 <div class="list-box">
                     <h3>List</h3>
                     <ul id="friendList"></ul>
@@ -28,16 +42,33 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const groupName = localStorage.getItem('groupName');
-            const friends = JSON.parse(localStorage.getItem('friendList'));
+            const groupName = localStorage.getItem('groupName') || "No Group Name Available";
+            let friends = JSON.parse(localStorage.getItem('friendList')) || [];
 
             document.getElementById('groupName').textContent = groupName;
 
             const friendListElement = document.getElementById('friendList');
-            friends.forEach(friend => {
-                const listItem = document.createElement('li');
-                listItem.textContent = friend;
-                friendListElement.appendChild(listItem);
+
+            function renderFriendsList() {
+                friendListElement.innerHTML = '';
+                friends.forEach(friend => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = friend;
+                    friendListElement.appendChild(listItem);
+                });
+            }
+
+            renderFriendsList();
+
+            document.getElementById('addFriendButton').addEventListener('click', () => {
+                const newFriendInput = document.getElementById('newFriend');
+                const newFriend = newFriendInput.value.trim();
+                if (newFriend) {
+                    friends.push(newFriend);
+                    localStorage.setItem('friendList', JSON.stringify(friends));
+                    renderFriendsList();
+                    newFriendInput.value = '';
+                }
             });
         });
     </script>
