@@ -14,11 +14,15 @@
         .input-group {
             margin-bottom: 20px;
         }
-        .picture-box img {
-            display: block;
-            margin-top: 10px;
-            max-width: 100%;
-            height: auto;
+        .list-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .list-item img {
+            margin-left: 10px;
+            max-width: 50px;
+            max-height: 50px;
         }
         .go-back {
             position: absolute;
@@ -44,16 +48,12 @@
             <div class="details">
                 <div class="input-group">
                     <input type="text" id="newFriend" placeholder="Add to the list">
+                    <input type="file" id="friendImage" accept="image/*">
                     <button id="addFriendButton">Add</button>
                 </div>
                 <div class="list-box">
                     <h3>List</h3>
                     <ul id="friendList"></ul>
-                </div>
-                <div class="picture-box">
-                    <h3>Pictures for Items</h3>
-                    <input type="file" id="uploadImage" accept="image/*">
-                    <img id="groupImage" src="https://via.placeholder.com/150" alt="Group Picture">
                 </div>
             </div>
         </div>
@@ -72,7 +72,13 @@
                 friendListElement.innerHTML = '';
                 friends.forEach(friend => {
                     const listItem = document.createElement('li');
-                    listItem.textContent = friend;
+                    listItem.classList.add('list-item');
+                    listItem.textContent = friend.name;
+                    if (friend.image) {
+                        const img = document.createElement('img');
+                        img.src = friend.image;
+                        listItem.appendChild(img);
+                    }
                     friendListElement.appendChild(listItem);
                 });
             }
@@ -81,23 +87,27 @@
 
             document.getElementById('addFriendButton').addEventListener('click', () => {
                 const newFriendInput = document.getElementById('newFriend');
+                const friendImageInput = document.getElementById('friendImage');
                 const newFriend = newFriendInput.value.trim();
-                if (newFriend) {
-                    friends.push(newFriend);
-                    localStorage.setItem('friendList', JSON.stringify(friends));
-                    renderFriendsList();
-                    newFriendInput.value = '';
-                }
-            });
 
-            document.getElementById('uploadImage').addEventListener('change', (event) => {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        document.getElementById('groupImage').src = e.target.result;
-                    };
-                    reader.readAsDataURL(file);
+                if (newFriend) {
+                    const file = friendImageInput.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            friends.push({ name: newFriend, image: e.target.result });
+                            localStorage.setItem('friendList', JSON.stringify(friends));
+                            renderFriendsList();
+                            newFriendInput.value = '';
+                            friendImageInput.value = '';
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        friends.push({ name: newFriend, image: null });
+                        localStorage.setItem('friendList', JSON.stringify(friends));
+                        renderFriendsList();
+                        newFriendInput.value = '';
+                    }
                 }
             });
         });
