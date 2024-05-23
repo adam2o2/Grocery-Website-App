@@ -35,6 +35,12 @@
         .go-back:hover {
             text-decoration: underline;
         }
+        .list-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .checked {
+            text-decoration: line-through;
+        }
     </style>
 </head>
 <body>
@@ -70,15 +76,38 @@
 
             function renderFriendsList() {
                 friendListElement.innerHTML = '';
-                friends.forEach(friend => {
+                friends.forEach((friend, index) => {
                     const listItem = document.createElement('li');
                     listItem.classList.add('list-item');
-                    listItem.textContent = friend.name;
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = `friend-${index}`;
+                    checkbox.checked = friend.checked;
+
+                    if (friend.checked) {
+                        listItem.classList.add('checked');
+                    }
+
+                    checkbox.addEventListener('change', () => {
+                        friend.checked = checkbox.checked;
+                        localStorage.setItem('friendList', JSON.stringify(friends));
+                        renderFriendsList();
+                    });
+
+                    const label = document.createElement('label');
+                    label.htmlFor = `friend-${index}`;
+                    label.textContent = friend.name;
+
+                    listItem.appendChild(checkbox);
+                    listItem.appendChild(label);
+
                     if (friend.image) {
                         const img = document.createElement('img');
                         img.src = friend.image;
                         listItem.appendChild(img);
                     }
+
                     friendListElement.appendChild(listItem);
                 });
             }
@@ -95,7 +124,7 @@
                     if (file) {
                         const reader = new FileReader();
                         reader.onload = function(e) {
-                            friends.push({ name: newFriend, image: e.target.result });
+                            friends.push({ name: newFriend, image: e.target.result, checked: false });
                             localStorage.setItem('friendList', JSON.stringify(friends));
                             renderFriendsList();
                             newFriendInput.value = '';
@@ -103,7 +132,7 @@
                         };
                         reader.readAsDataURL(file);
                     } else {
-                        friends.push({ name: newFriend, image: null });
+                        friends.push({ name: newFriend, image: null, checked: false });
                         localStorage.setItem('friendList', JSON.stringify(friends));
                         renderFriendsList();
                         newFriendInput.value = '';

@@ -97,3 +97,6 @@ h2 {
 .box ul li:last-child {
     border-bottom: none;
 }
+.list-item input[type="checkbox"] {
+    margin-right: 10px;
+}
