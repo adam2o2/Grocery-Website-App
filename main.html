@@ -68,15 +68,28 @@
             const newBox = document.createElement('div');
             newBox.className = 'box';
             const friendListHTML = friends.map(friend => `<li>${friend}</li>`).join('');
-            newBox.innerHTML = `<h2>${groupName}</h2><ul>${friendListHTML}</ul>`;
-            newBox.addEventListener('click', function() {
-                localStorage.setItem('groupName', groupName);
-                localStorage.setItem('friendList', JSON.stringify(friends));
+            newBox.innerHTML = `
+                <h2>${groupName}</h2>
+                <ul>${friendListHTML}</ul>
+                <button class="enterGroupButton">Enter Group</button>
+                <button class="deleteGroupButton">Delete</button>
+            `;
+            newBox.querySelector('.deleteGroupButton').addEventListener('click', function() {
+                deleteGroup(groupName);
+                groupContainer.removeChild(newBox);
+            });
+            newBox.querySelector('.enterGroupButton').addEventListener('click', function() {
+                localStorage.setItem('currentGroup', JSON.stringify({ groupName, friends }));
                 window.location.href = 'group.html';
             });
             groupContainer.appendChild(newBox);
 
             groups.push({ groupName, friends });
+            localStorage.setItem('groups', JSON.stringify(groups));
+        }
+
+        function deleteGroup(groupName) {
+            groups = groups.filter(group => group.groupName !== groupName);
             localStorage.setItem('groups', JSON.stringify(groups));
         }
 
@@ -87,10 +100,18 @@
                 const newBox = document.createElement('div');
                 newBox.className = 'box';
                 const friendListHTML = group.friends.map(friend => `<li>${friend}</li>`).join('');
-                newBox.innerHTML = `<h2>${group.groupName}</h2><ul>${friendListHTML}</ul>`;
-                newBox.addEventListener('click', function() {
-                    localStorage.setItem('groupName', group.groupName);
-                    localStorage.setItem('friendList', JSON.stringify(group.friends));
+                newBox.innerHTML = `
+                    <h2>${group.groupName}</h2>
+                    <ul>${friendListHTML}</ul>
+                    <button class="enterGroupButton">Enter Group</button>
+                    <button class="deleteGroupButton">Delete</button>
+                `;
+                newBox.querySelector('.deleteGroupButton').addEventListener('click', function() {
+                    deleteGroup(group.groupName);
+                    groupContainer.removeChild(newBox);
+                });
+                newBox.querySelector('.enterGroupButton').addEventListener('click', function() {
+                    localStorage.setItem('currentGroup', JSON.stringify(group));
                     window.location.href = 'group.html';
                 });
                 groupContainer.appendChild(newBox);

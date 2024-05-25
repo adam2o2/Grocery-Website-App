@@ -3,102 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grocery Website</title>
+    <title>Group Chat</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>Grocery Website</h1>
+        <h1>Group Chat</h1>
     </header>
     <div class="container">
-        <div class="main-content">
-            <h2>Create a grocery list</h2>
-            <p>Able to create group with friends and family for a specific grocery list</p>
-            <input type="text" id="groupName" placeholder="Enter group name">
-            <input type="text" id="friendName" placeholder="Enter friend's name">
-            <button id="addFriendButton">Add Friend</button>
-            <ul id="friendList"></ul>
-            <button id="createGroupButton">Create Group</button>
+        <div id="groupInfo">
+            <!-- Group info will be displayed here -->
         </div>
-    </div>
-    <div class="container" id="groupContainer">
-        <!-- New groups will be added here -->
+        <div id="chat">
+            <h2>Chat</h2>
+            <ul id="messages"></ul>
+            <input type="text" id="messageInput" placeholder="Type a message">
+            <button id="sendButton">Send</button>
+        </div>
     </div>
 
     <script>
-        const friendList = [];
-        let groups = JSON.parse(localStorage.getItem('groups')) || [];
-
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('addFriendButton').addEventListener('click', function() {
-                const friendName = document.getElementById('friendName').value.trim();
-                if (friendName) {
-                    addFriend(friendName);
-                    document.getElementById('friendName').value = ''; // Clear the input field
+            const group = JSON.parse(localStorage.getItem('currentGroup'));
+            if (group) {
+                const groupInfoElement = document.getElementById('groupInfo');
+                groupInfoElement.innerHTML = `
+                    <h2>${group.groupName}</h2>
+                    <ul>${group.friends.map(friend => `<li>${friend}</li>`).join('')}</ul>
+                `;
+            }
+
+            document.getElementById('sendButton').addEventListener('click', function() {
+                const messageInput = document.getElementById('messageInput');
+                const message = messageInput.value.trim();
+                if (message) {
+                    const messageElement = document.createElement('li');
+                    messageElement.textContent = message;
+                    document.getElementById('messages').appendChild(messageElement);
+                    messageInput.value = ''; // Clear the input field
                 } else {
-                    alert('Please enter a friend\'s name.');
+                    alert('Please enter a message.');
                 }
             });
-
-            document.getElementById('createGroupButton').addEventListener('click', function() {
-                const groupName = document.getElementById('groupName').value.trim();
-                if (groupName && friendList.length > 0) {
-                    createGroupBox(groupName, friendList);
-                    document.getElementById('groupName').value = ''; // Clear the input field
-                    friendList.length = 0; // Clear the friend list
-                    document.getElementById('friendList').innerHTML = ''; // Clear the displayed friend list
-                } else {
-                    alert('Please enter a group name and add at least one friend.');
-                }
-            });
-
-            renderGroups();
         });
-
-        function addFriend(friendName) {
-            friendList.push(friendName);
-            const friendListElement = document.getElementById('friendList');
-            const listItem = document.createElement('li');
-            listItem.textContent = friendName;
-            friendListElement.appendChild(listItem);
-        }
-
-        function createGroupBox(groupName, friends) {
-            const groupContainer = document.getElementById('groupContainer');
-            const newBox = document.createElement('div');
-            newBox.className = 'box';
-            const friendListHTML = friends.map(friend => `<li>${friend}</li>`).join('');
-            newBox.innerHTML = `<h2>${groupName}</h2><ul>${friendListHTML}</ul><button class="deleteGroupButton">Delete</button>`;
-            newBox.querySelector('.deleteGroupButton').addEventListener('click', function() {
-                deleteGroup(groupName);
-                groupContainer.removeChild(newBox);
-            });
-            groupContainer.appendChild(newBox);
-
-            groups.push({ groupName, friends });
-            localStorage.setItem('groups', JSON.stringify(groups));
-        }
-
-        function deleteGroup(groupName) {
-            groups = groups.filter(group => group.groupName !== groupName);
-            localStorage.setItem('groups', JSON.stringify(groups));
-        }
-
-        function renderGroups() {
-            const groupContainer = document.getElementById('groupContainer');
-            groupContainer.innerHTML = '';
-            groups.forEach(group => {
-                const newBox = document.createElement('div');
-                newBox.className = 'box';
-                const friendListHTML = group.friends.map(friend => `<li>${friend}</li>`).join('');
-                newBox.innerHTML = `<h2>${group.groupName}</h2><ul>${friendListHTML}</ul><button class="deleteGroupButton">Delete</button>`;
-                newBox.querySelector('.deleteGroupButton').addEventListener('click', function() {
-                    deleteGroup(group.groupName);
-                    groupContainer.removeChild(newBox);
-                });
-                groupContainer.appendChild(newBox);
-            });
-        }
     </script>
 </body>
 </html>
