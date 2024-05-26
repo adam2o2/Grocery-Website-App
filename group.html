@@ -3,22 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Group Chat</title>
+    <title>Group Grocery List</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .white-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .item-entry {
+            margin-bottom: 10px;
+        }
+        .item-entry img {
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        .item-entry input[type="checkbox"] {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Group Chat</h1>
+        <h1>Group Grocery List</h1>
     </header>
     <div class="container">
-        <div id="groupInfo">
+        <div id="groupInfo" class="white-box">
             <!-- Group info will be displayed here -->
         </div>
-        <div id="chat">
-            <h2>Chat</h2>
-            <ul id="messages"></ul>
-            <input type="text" id="messageInput" placeholder="Type a message">
-            <button id="sendButton">Send</button>
+        <div id="items" class="white-box">
+            <h2>Grocery List</h2>
+            <div class="item-entry">
+                <input type="text" id="itemInput" placeholder="Enter item">
+                <input type="file" id="itemImageInput" accept="image/*">
+                <button id="addItemButton">Add Item</button>
+            </div>
+            <ul id="itemList"></ul>
         </div>
     </div>
 
@@ -33,16 +54,42 @@
                 `;
             }
 
-            document.getElementById('sendButton').addEventListener('click', function() {
-                const messageInput = document.getElementById('messageInput');
-                const message = messageInput.value.trim();
-                if (message) {
-                    const messageElement = document.createElement('li');
-                    messageElement.textContent = message;
-                    document.getElementById('messages').appendChild(messageElement);
-                    messageInput.value = ''; // Clear the input field
+            document.getElementById('addItemButton').addEventListener('click', function() {
+                const itemInput = document.getElementById('itemInput');
+                const itemImageInput = document.getElementById('itemImageInput');
+                const itemName = itemInput.value.trim();
+                const itemImage = itemImageInput.files[0];
+
+                if (itemName) {
+                    const itemElement = document.createElement('li');
+                    const itemContent = document.createElement('span');
+                    itemContent.textContent = itemName;
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.addEventListener('change', function() {
+                        itemContent.style.textDecoration = checkbox.checked ? 'line-through' : 'none';
+                    });
+
+                    itemElement.appendChild(checkbox);
+                    if (itemImage) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.alt = itemName;
+                            img.width = 50;
+                            itemElement.appendChild(img);
+                        };
+                        reader.readAsDataURL(itemImage);
+                    }
+                    itemElement.appendChild(itemContent);
+                    document.getElementById('itemList').appendChild(itemElement);
+
+                    itemInput.value = ''; // Clear the input field
+                    itemImageInput.value = ''; // Clear the file input
                 } else {
-                    alert('Please enter a message.');
+                    alert('Please enter an item name.');
                 }
             });
         });
