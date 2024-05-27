@@ -22,6 +22,24 @@
         .item-entry input[type="checkbox"] {
             margin-right: 10px;
         }
+        .delete-button {
+            margin-left: 10px;
+            color: red;
+            cursor: pointer;
+        }
+        .back-button {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -41,6 +59,7 @@
             </div>
             <ul id="itemList"></ul>
         </div>
+        <a href="main.html" class="back-button">Go Back</a>
     </div>
 
     <script>
@@ -71,6 +90,13 @@
                         itemContent.style.textDecoration = checkbox.checked ? 'line-through' : 'none';
                     });
 
+                    const deleteButton = document.createElement('span');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.className = 'delete-button';
+                    deleteButton.addEventListener('click', function() {
+                        document.getElementById('itemList').removeChild(itemElement);
+                    });
+
                     itemElement.appendChild(checkbox);
                     if (itemImage) {
                         const reader = new FileReader();
@@ -84,6 +110,7 @@
                         reader.readAsDataURL(itemImage);
                     }
                     itemElement.appendChild(itemContent);
+                    itemElement.appendChild(deleteButton);
                     document.getElementById('itemList').appendChild(itemElement);
 
                     itemInput.value = ''; // Clear the input field
