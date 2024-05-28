@@ -73,6 +73,61 @@
                 `;
             }
 
+            const itemList = document.getElementById('itemList');
+            const storageKey = `groceryItems_${group.groupName}`;
+
+            function loadItems() {
+                const items = JSON.parse(localStorage.getItem(storageKey)) || [];
+                items.forEach(item => {
+                    addItemToDOM(item.name, item.image, item.checked);
+                });
+            }
+
+            function saveItems() {
+                const items = [];
+                itemList.querySelectorAll('li').forEach(itemElement => {
+                    const name = itemElement.querySelector('span').textContent;
+                    const image = itemElement.querySelector('img') ? itemElement.querySelector('img').src : null;
+                    const checked = itemElement.querySelector('input[type="checkbox"]').checked;
+                    items.push({ name, image, checked });
+                });
+                localStorage.setItem(storageKey, JSON.stringify(items));
+            }
+
+            function addItemToDOM(name, imageSrc, checked = false) {
+                const itemElement = document.createElement('li');
+                const itemContent = document.createElement('span');
+                itemContent.textContent = name;
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = checked;
+                checkbox.addEventListener('change', function() {
+                    itemContent.style.textDecoration = checkbox.checked ? 'line-through' : 'none';
+                    saveItems();
+                });
+
+                const deleteButton = document.createElement('span');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'delete-button';
+                deleteButton.addEventListener('click', function() {
+                    itemList.removeChild(itemElement);
+                    saveItems();
+                });
+
+                itemElement.appendChild(checkbox);
+                if (imageSrc) {
+                    const img = document.createElement('img');
+                    img.src = imageSrc;
+                    img.alt = name;
+                    img.width = 50;
+                    itemElement.appendChild(img);
+                }
+                itemElement.appendChild(itemContent);
+                itemElement.appendChild(deleteButton);
+                itemList.appendChild(itemElement);
+            }
+
             document.getElementById('addItemButton').addEventListener('click', function() {
                 const itemInput = document.getElementById('itemInput');
                 const itemImageInput = document.getElementById('itemImageInput');
@@ -80,38 +135,19 @@
                 const itemImage = itemImageInput.files[0];
 
                 if (itemName) {
-                    const itemElement = document.createElement('li');
-                    const itemContent = document.createElement('span');
-                    itemContent.textContent = itemName;
-
-                    const checkbox = document.createElement('input');
-                    checkbox.type = 'checkbox';
-                    checkbox.addEventListener('change', function() {
-                        itemContent.style.textDecoration = checkbox.checked ? 'line-through' : 'none';
-                    });
-
-                    const deleteButton = document.createElement('span');
-                    deleteButton.textContent = 'Delete';
-                    deleteButton.className = 'delete-button';
-                    deleteButton.addEventListener('click', function() {
-                        document.getElementById('itemList').removeChild(itemElement);
-                    });
-
-                    itemElement.appendChild(checkbox);
+                    let imageSrc = null;
                     if (itemImage) {
                         const reader = new FileReader();
                         reader.onload = function(e) {
-                            const img = document.createElement('img');
-                            img.src = e.target.result;
-                            img.alt = itemName;
-                            img.width = 50;
-                            itemElement.appendChild(img);
+                            imageSrc = e.target.result;
+                            addItemToDOM(itemName, imageSrc);
+                            saveItems();
                         };
                         reader.readAsDataURL(itemImage);
+                    } else {
+                        addItemToDOM(itemName, imageSrc);
+                        saveItems();
                     }
-                    itemElement.appendChild(itemContent);
-                    itemElement.appendChild(deleteButton);
-                    document.getElementById('itemList').appendChild(itemElement);
 
                     itemInput.value = ''; // Clear the input field
                     itemImageInput.value = ''; // Clear the file input
@@ -119,6 +155,8 @@
                     alert('Please enter an item name.');
                 }
             });
+
+            loadItems();
         });
     </script>
 </body>
