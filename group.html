@@ -64,14 +64,40 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const group = JSON.parse(localStorage.getItem('currentGroup'));
+            let group = JSON.parse(localStorage.getItem('currentGroup'));
+            const groups = JSON.parse(localStorage.getItem('groups')) || [];
+            
+            function updateGroupsInLocalStorage() {
+                const groupIndex = groups.findIndex(g => g.groupName === group.groupName);
+                if (groupIndex !== -1) {
+                    groups[groupIndex] = group;
+                    localStorage.setItem('groups', JSON.stringify(groups));
+                }
+            }
+
             if (group) {
                 const groupInfoElement = document.getElementById('groupInfo');
                 groupInfoElement.innerHTML = `
                     <h2>${group.groupName}</h2>
-                    <ul>${group.friends.map(friend => `<li>${friend}</li>`).join('')}</ul>
+                    <ul id="friendsList">${group.friends.map((friend, index) => `
+                        <li>
+                            ${friend}
+                            <span class="delete-button" data-index="${index}">Delete</span>
+                        </li>`).join('')}
+                    </ul>
                 `;
             }
+
+            const friendsList = document.getElementById('friendsList');
+            friendsList.addEventListener('click', function(event) {
+                if (event.target.classList.contains('delete-button')) {
+                    const index = event.target.getAttribute('data-index');
+                    group.friends.splice(index, 1);
+                    localStorage.setItem('currentGroup', JSON.stringify(group));
+                    event.target.parentElement.remove();
+                    updateGroupsInLocalStorage();
+                }
+            });
 
             const itemList = document.getElementById('itemList');
             const storageKey = `groceryItems_${group.groupName}`;
