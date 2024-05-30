@@ -49,6 +49,10 @@
     <div class="container">
         <div id="groupInfo" class="white-box">
             <!-- Group info will be displayed here -->
+            <div>
+                <input type="text" id="friendInput" placeholder="Enter friend's name">
+                <button id="addFriendButton">Add Friend</button>
+            </div>
         </div>
         <div id="items" class="white-box">
             <h2>Grocery List</h2>
@@ -75,7 +79,7 @@
                 }
             }
 
-            if (group) {
+            function displayGroupInfo() {
                 const groupInfoElement = document.getElementById('groupInfo');
                 groupInfoElement.innerHTML = `
                     <h2>${group.groupName}</h2>
@@ -85,10 +89,18 @@
                             <span class="delete-button" data-index="${index}">Delete</span>
                         </li>`).join('')}
                     </ul>
+                    <div>
+                        <input type="text" id="friendInput" placeholder="Enter friend's name">
+                        <button id="addFriendButton">Add Friend</button>
+                    </div>
                 `;
             }
 
-            const friendsList = document.getElementById('friendsList');
+            if (group) {
+                displayGroupInfo();
+            }
+
+            const friendsList = document.getElementById('groupInfo');
             friendsList.addEventListener('click', function(event) {
                 if (event.target.classList.contains('delete-button')) {
                     const index = event.target.getAttribute('data-index');
@@ -96,6 +108,20 @@
                     localStorage.setItem('currentGroup', JSON.stringify(group));
                     event.target.parentElement.remove();
                     updateGroupsInLocalStorage();
+                }
+            });
+
+            document.getElementById('addFriendButton').addEventListener('click', function() {
+                const friendInput = document.getElementById('friendInput');
+                const friendName = friendInput.value.trim();
+                if (friendName) {
+                    group.friends.push(friendName);
+                    localStorage.setItem('currentGroup', JSON.stringify(group));
+                    updateGroupsInLocalStorage();
+                    displayGroupInfo();
+                    friendInput.value = ''; // Clear the input field
+                } else {
+                    alert('Please enter a friend\'s name.');
                 }
             });
 
