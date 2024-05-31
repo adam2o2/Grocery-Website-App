@@ -2,13 +2,15 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #fff;
+    color: #000;
 }
 
 header {
-    color: #000000;
-    padding: 10px 0;
+    color: #000;
+    padding: 30px 0;
     text-align: center;
+    font-size: 2em;
 }
 
 .container {
@@ -20,8 +22,8 @@ header {
 .main-content {
     background-color: #fff;
     padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
 }
 
@@ -36,22 +38,24 @@ h2 {
     font-size: 1.2em;
     border: 1px solid #ccc;
     border-radius: 5px;
+    transition: border-color 0.3s ease;
+}
+
+.large-input:focus {
+    border-color: #000;
 }
 
 .large-button {
     width: 100%;
     padding: 15px;
     font-size: 1.2em;
-    background-color: #28a745;
+    background-color: #000;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin-bottom: 10px;
-}
-
-.large-button:hover {
-    background-color: #218838;
+    transition: background-color 0.3s ease;
 }
 
 .large-list {
@@ -70,11 +74,11 @@ h2 {
 }
 
 .box {
-    background-color: #fff;
+    background-color: #f4f4f4;
     padding: 20px;
     margin-top: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     cursor: pointer;
 }
 
@@ -96,41 +100,46 @@ h2 {
 .box ul li:last-child {
     border-bottom: none;
 }
+
 .list-item input[type="checkbox"] {
     margin-right: 10px;
 }
+
 
 .white-box {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 40px; /* Added margin-top to move the white-box down */
 }
+
 .item-entry {
     margin-bottom: 10px;
 }
+
 .item-entry img {
     vertical-align: middle;
     margin-right: 10px;
 }
+
 .item-entry input[type="checkbox"] {
     margin-right: 10px;
 }
+
 .delete-button {
     margin-left: 10px;
     color: red;
     cursor: pointer;
 }
+
 .back-button {
     margin-top: 20px;
     display: inline-block;
     padding: 10px 20px;
-    background-color: #007BFF;
+    background-color: #000;
     color: white;
     text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
-}
-.back-button:hover {
-    background-color: #0056b3;
 }
